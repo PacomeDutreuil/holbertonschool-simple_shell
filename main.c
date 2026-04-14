@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <string.h>
-#include <ctype.h>
 
 /**
  * main - simple shell
@@ -31,15 +30,19 @@ int main(void)
 			break;
 		}
 
+		/* remove newline */
 		line[strcspn(line, "\n")] = '\0';
 
+		/* remove trailing spaces */
 		i = strlen(line) - 1;
-		while (i >= 0 && isspace(line[i]))
+		while (i >= 0 &&
+			(line[i] == ' ' || line[i] == '\t' || line[i] == '\n'))
 		{
 			line[i] = '\0';
 			i--;
 		}
 
+		/* ignore empty line */
 		if (line[0] == '\0')
 			continue;
 
