@@ -25,7 +25,8 @@ int main(void)
 
         if (getline(&line, &len, stdin) == -1)
         {
-            printf("\n");
+            if (isatty(STDIN_FILENO))
+                printf("\n");
             break;
         }
 
