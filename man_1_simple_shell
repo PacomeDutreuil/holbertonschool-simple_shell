@@ -1,0 +1,43 @@
+# Man Simple Shell 
+
+-TH hsh 1 "Avril 2026" "1.0" "Manuel Simple Shell"
+
+-SH NOM:
+hsh - interpréteur de commandes UNIX simple
+
+-SH SYNOPSIS:
+.B hsh
+
+-SH DESCRIPTION:
+hsh est un interpréteur de ligne de commande simple qui exécute les commandes saisies par l’utilisateur.
+
+Il reproduit le comportement de base du shell UNIX standard (/bin/sh).
+Il fonctionne en mode interactif et en mode non interactif.
+
+-SH UTILISATION:
+Exécution en mode interactif :
+.B ./hsh
+
+Exécution en mode non interactif :
+.B echo "ls" | ./hsh
+
+-SH FONCTIONNALITÉS:
+
+-Affiche un prompt
+-Lit l’entrée utilisateur
+-Analyse les commandes
+-Exécute les commandes avec execve
+-Recherche les commandes dans le PATH
+-Gère les erreurs
+
+-SH VALEUR DE RETOUR:
+Retourne 0 en cas de succès.
+Se termine en cas d’erreur ou lors de la réception d’un EOF.
+
+-SH ENVIRONNEMENT:
+Utilise les variables d’environnement telles que PATH pour localiser les exécutables.
+
+-SH AUTEURS:
+
+-Pacôme Dutreuil
+-Youssef Ben Rahou
