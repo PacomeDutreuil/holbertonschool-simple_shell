@@ -19,7 +19,8 @@ int main(void)
 
     while (1)
     {
-        printf("($) ");
+        if (isatty(STDIN_FILENO))
+            printf("($) ");
         fflush(stdout);
 
         if (getline(&line, &len, stdin) == -1)
