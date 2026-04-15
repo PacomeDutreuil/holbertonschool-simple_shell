@@ -84,6 +84,8 @@ int main(int ac, char **av, char **env)
 
 	(void)ac;
 
+	int status = 0;
+
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
