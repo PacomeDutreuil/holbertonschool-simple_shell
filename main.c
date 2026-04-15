@@ -39,10 +39,9 @@ char *find_path(char *cmd)
 	return (NULL);
 }
 
-/**
- * main - simple shell with PATH
- *
- * Return: 0
+/*
+main - simple shell with PATH 
+Return: 0
  */
 int main(void)
 {
