@@ -1,19 +1,18 @@
 #include "shell.h"
 
 /**
- * get_path - get PATH from environ
+ * get_path - extract PATH from env
  * @env: environment variables
- * Return: PATH string
+ * Return: PATH string or NULL
  */
 char *get_path(char **env)
 {
-	int i = 0;
+	int i;
 
-	while (env[i])
+	for (i = 0; env[i]; i++)
 	{
 		if (strncmp(env[i], "PATH=", 5) == 0)
 			return (env[i] + 5);
-		i++;
 	}
 	return (NULL);
 }
@@ -29,10 +28,9 @@ char *find_command(char *cmd, char **env)
 	char *path, *path_copy, *token, *full_path;
 	struct stat st;
 
-	if (cmd == NULL)
+	if (!cmd)
 		return (NULL);
 
-	/* if command already valid path */
 	if (stat(cmd, &st) == 0)
 		return (strdup(cmd));
 
@@ -58,6 +56,7 @@ char *find_command(char *cmd, char **env)
 			free(path_copy);
 			return (full_path);
 		}
+
 		free(full_path);
 		token = strtok(NULL, ":");
 	}
@@ -71,20 +70,19 @@ char *find_command(char *cmd, char **env)
  * @ac: argument count
  * @av: argument vector
  * @env: environment
- * Return: 0
+ * Return: exit status
  */
 int main(int ac, char **av, char **env)
 {
-	char *line = NULL, *cmd_path = NULL;
+	char *line = NULL, *cmd_path;
 	size_t len = 0;
 	ssize_t read;
 	char *args[100];
-	int status, i;
+	int status = 0;
+	int i;
 	pid_t pid;
 
 	(void)ac;
-
-	int status = 0;
 
 	while (1)
 	{
@@ -95,16 +93,14 @@ int main(int ac, char **av, char **env)
 		if (read == -1)
 		{
 			free(line);
-			exit(0);
+			exit(status);
 		}
 
-		/* remove newline */
-		line[strcspn(line, "\n")] = 0;
+		line[strcspn(line, "\n")] = '\0';
 
 		if (line[0] == '\0')
 			continue;
 
-		/* parse */
 		i = 0;
 		args[i] = strtok(line, " ");
 		while (args[i] && i < 99)
@@ -114,7 +110,7 @@ int main(int ac, char **av, char **env)
 		if (strcmp(args[0], "exit") == 0)
 		{
 			free(line);
-			exit(0);
+			exit(status);
 		}
 
 		cmd_path = find_command(args[0], env);
@@ -122,6 +118,7 @@ int main(int ac, char **av, char **env)
 		if (!cmd_path)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", av[0], args[0]);
+			status = 127;
 			continue;
 		}
 
@@ -135,11 +132,15 @@ int main(int ac, char **av, char **env)
 			}
 		}
 		else
+		{
 			wait(&status);
+			if (WIFEXITED(status))
+				status = WEXITSTATUS(status);
+		}
 
 		free(cmd_path);
 	}
 
 	free(line);
-	return (0);
-}
+	return (status);
+
