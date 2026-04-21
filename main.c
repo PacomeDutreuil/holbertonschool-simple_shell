@@ -36,13 +36,15 @@ int main(int ac, char **av, char **env)
 		if (line[0] == '\0')
 			continue;
 
+		/* parse */
 		i = 0;
 		args[i] = strtok(line, " ");
 		while (args[i] && i < 99)
 			args[++i] = strtok(NULL, " ");
 		args[i] = NULL;
 
-		if (strcmp(args[0], "exit") == 0)
+		/* ===== BUILTIN EXIT ===== */
+		if (args[0] && strcmp(args[0], "exit") == 0)
 		{
 			free(line);
 			exit(status);
