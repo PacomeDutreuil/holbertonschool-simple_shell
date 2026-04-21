@@ -36,7 +36,7 @@ int main(int ac, char **av, char **env)
 		if (line[0] == '\0')
 			continue;
 
-		/* parse */
+		/* ===== PARSE ===== */
 		i = 0;
 		args[i] = strtok(line, " ");
 		while (args[i] && i < 99)
@@ -48,6 +48,19 @@ int main(int ac, char **av, char **env)
 		{
 			free(line);
 			exit(status);
+		}
+
+		/* ===== BUILTIN ENV ===== */
+		if (args[0] && strcmp(args[0], "env") == 0)
+		{
+			int j = 0;
+
+			while (env[j])
+			{
+				printf("%s\n", env[j]);
+				j++;
+			}
+			continue;
 		}
 
 		cmd_path = find_command(args[0], env);
